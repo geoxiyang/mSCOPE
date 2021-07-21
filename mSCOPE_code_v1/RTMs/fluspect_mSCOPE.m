@@ -2,6 +2,12 @@ function [leafopt]=fluspect_mSCOPE(mly,spectral,leafbio,optipar)
         % leaf reflectance, transmittance and the excitation-fluorescence matrices calculation
         % for 60 sublayers
         indStar =[1,floor(cumsum(mly.pLAI/sum(mly.pLAI))*60)];  % index of starting for each different layer
+        % XY made a change to address the issue that sometimes indStar ends
+        % with 59 even when cumsum(mly.pLAI/sum(mly.pLAI)) == 1 in the last
+        % element -- could be related to the precision
+        if indStar(end) == 59
+            indStar(end) = 60;
+        end
         for i=1:mly.nly
             leafbio.Cab     =   mly.pCab(i);
             leafbio.Cw      =   mly.pCw(i);
